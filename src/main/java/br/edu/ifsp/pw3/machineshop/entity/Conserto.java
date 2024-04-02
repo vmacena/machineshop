@@ -12,11 +12,11 @@ public class Conserto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+
     @Column(name = "DATA_DE_ENTRADA")
     private String dataDeEntrada;
 
-    @NotNull
+
     @Column(name = "DATA_DE_SAIDA")
     private String dataDeSaida;
 

@@ -9,15 +9,15 @@ import lombok.Data;
 @Data
 public class Veiculo {
 
-    @NotNull
+
     @Column(name = "VEICULO_MARCA")
     private String marca;
 
-    @NotNull
+
     @Column(name = "VEICULO_MODELO")
     private String modelo;
 
-    @NotNull
+
     @Column(name = "VEICULO_ANO")
     private int ano;
 }

@@ -25,7 +25,7 @@ public class ConsertoController {
     }
 
     @PostMapping("/novoconserto")
-    @Transactional
+
     public Conserto novoConserto(@RequestBody Conserto novoConserto) {
         return repository.save(novoConserto);
     }
