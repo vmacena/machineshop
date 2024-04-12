@@ -1,3 +1,16 @@
 package br.edu.ifsp.pw3.machineshop.dto;
-public record VeiculoDTO(String marca, String modelo, int ano) {}
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
+public record VeiculoDTO(
+        @NotBlank
+        String marca,
+        @NotBlank
+        String modelo,
+        @NotBlank
+        @Pattern(regexp = "\\d{6}")
+        int ano,
+        String cor
+    ) {}
 

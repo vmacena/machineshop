@@ -1,3 +1,9 @@
 package br.edu.ifsp.pw3.machineshop.dto;
 
-public record MecanicoDTO(String nome, int anosDeExperiencia) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record MecanicoDTO(
+        @NotBlank
+        String nome,
+        int anosDeExperiencia
+    ) {}

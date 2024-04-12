@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 @Entity
 @AllArgsConstructor
@@ -14,11 +17,9 @@ public class Conserto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Column(name = "DATA_DE_ENTRADA")
     private String dataDeEntrada;
 
-    @NotNull
     @Column(name = "DATA_DE_SAIDA")
     private String dataDeSaida;
 
@@ -34,5 +35,28 @@ public class Conserto {
         this.dataDeSaida = dataDeSaida;
         this.mecanico = mecanico;
         this.veiculo = veiculo;
+    }
+
+    public Conserto(Conserto conserto) {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDataDeEntrada() {
+        return dataDeEntrada;
+    }
+
+    public String getDataDeSaida() {
+        return dataDeSaida;
+    }
+
+    public Mecanico getMecanico() {
+        return mecanico;
+    }
+
+    public Veiculo getVeiculo() {
+        return veiculo;
     }
 }
