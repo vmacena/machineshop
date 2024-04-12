@@ -5,7 +5,7 @@ Formato de requisição POST:
 {
             "dataDeEntrada": "08/03/2024",
             "dataDeSaida": "25/03/2024",
-            "mecanico": {
+            "mecanicoResponsavel": {
                 "nome": "Vinicius Macena",
                 "anosDeExperiencia": 21
             },
