@@ -11,18 +11,26 @@ import lombok.Data;
 @Data
 public class Veiculo {
 
-    @NotNull
     @Column(name = "VEICULO_MARCA")
     private String marca;
-
-    @NotNull
     @Column(name = "VEICULO_MODELO")
     private String modelo;
-
-    @NotNull
     @Column(name = "VEICULO_ANO")
-    private int ano;
+    private String ano;
+    @Column(name = "VEICULO_COR")
+    private String cor;
 
     public Veiculo() {}
 
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public String getCor() {
+        return cor;
+    }
 }

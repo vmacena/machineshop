@@ -1,0 +1,1 @@
+alter table conserto alter column veiculo_ano VARCHAR(255);

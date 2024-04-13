@@ -11,15 +11,21 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class Mecanico {
-    @NotNull
     @Column(name = "MECANICO_NOME")
     private String nome;
 
-    @NotNull
     @Column(name = "MECANICO_ANOS_DE_EXPERIENCIA")
     private int anosDeExperiencia;
 
     public Mecanico() {
 
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getAnosDeExperiencia() {
+        return anosDeExperiencia;
     }
 }
