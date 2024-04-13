@@ -1768,12 +1768,3 @@ select c1_0.id,c1_0.data_de_entrada,c1_0.data_de_saida,c1_0.mecanico_anos_de_exp
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-2024-04-12 20:17:23.644482-03:00 jdbc[14]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]describe conserto"; expected "DELETE, DROP"; SQL statement:
-describe conserto [42001-224]
-2024-04-12 20:17:30.985506-03:00 jdbc[14]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]desc conserto"; expected "DELETE, DROP"; SQL statement:
-desc conserto [42001-224]
-2024-04-12 20:18:26.129859-03:00 jdbc[14]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]DESCRIBE CONSERTO"; expected "DELETE, DROP"; SQL statement:
-DESCRIBE CONSERTO [42001-224]
