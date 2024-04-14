@@ -1,4 +1,5 @@
 EAD 3 de Programação Web 3. Feito por Gabriel Zanotim Manhani e Vinicius Macena.
+
 Formato da requisição POST:
 ```
 {
@@ -11,7 +12,7 @@ Formato da requisição POST:
             "veiculo": {
                 "marca": "VW",
                 "modelo": "Gol",
-                "ano": 2000,
+                "ano": "2000",
                 "cor": "vermelho"
             }
         }
