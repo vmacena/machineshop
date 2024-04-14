@@ -1,5 +1,6 @@
 EAD 3 de Programação Web 3. Feito por Gabriel Zanotim Manhani e Vinicius Macena.
 Formato da requisição POST:
+```
 {
             "dataDeEntrada": "08/03/2024",
             "dataDeSaida": "25/03/2024",
@@ -14,3 +15,4 @@ Formato da requisição POST:
                 "cor": "vermelho"
             }
         }
+```
