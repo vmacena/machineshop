@@ -16,7 +16,7 @@ public class Veiculo {
     @Column(name = "VEICULO_MODELO")
     private String modelo;
     @Column(name = "VEICULO_ANO")
-    private String ano;
+    private int ano;
     @Column(name = "VEICULO_COR")
     private String cor;
 
@@ -28,6 +28,10 @@ public class Veiculo {
 
     public String getModelo() {
         return modelo;
+    }
+
+    public int getAno() {
+        return ano;
     }
 
     public String getCor() {
