@@ -61,6 +61,6 @@ public class ConsertoController {
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         String field = ex.getConstraintViolations().iterator().next().getPropertyPath().toString();
         String message = ex.getConstraintViolations().iterator().next().getMessage();
-        return new ResponseEntity<>("Erro de validação no campo "+ message, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Erro de validação no campo '" + field + "': " + message, HttpStatus.BAD_REQUEST);
     }
 }
