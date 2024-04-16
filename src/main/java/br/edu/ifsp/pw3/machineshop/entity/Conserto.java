@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 @Entity
 @AllArgsConstructor

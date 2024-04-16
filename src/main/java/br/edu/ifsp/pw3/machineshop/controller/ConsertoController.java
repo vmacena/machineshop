@@ -33,7 +33,7 @@ public class ConsertoController {
         return repository.findAll(paginacao);
     }
 
-    @GetMapping("/dadossimples")
+    @GetMapping("/dados_simples")
     public List<DadosSimplesDTO> algunsDados(){
         return repository.findAll().stream().map(DadosSimplesDTO::new).toList();
     }

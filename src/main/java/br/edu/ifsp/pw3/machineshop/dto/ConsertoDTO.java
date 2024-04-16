@@ -1,7 +1,5 @@
 package br.edu.ifsp.pw3.machineshop.dto;
 
-import br.edu.ifsp.pw3.machineshop.entity.Mecanico;
-import br.edu.ifsp.pw3.machineshop.entity.Veiculo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 
