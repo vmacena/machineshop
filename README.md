@@ -17,21 +17,3 @@ Formato da requisição POST:
             }
         }
 ```
-
-
-Requisições:
-
-```
-post:
-
-http://localhost:8080/novoconserto
-
-get:
-
-http://localhost:8080/listartodos
-
-get simples:
-
-http://localhost:8080/dados_simples
-
-```

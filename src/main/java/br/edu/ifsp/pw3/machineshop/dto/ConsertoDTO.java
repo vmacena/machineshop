@@ -1,6 +1,5 @@
 package br.edu.ifsp.pw3.machineshop.dto;
 
-import br.edu.ifsp.pw3.machineshop.entity.Conserto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 
@@ -12,11 +11,4 @@ public record ConsertoDTO(
         @Valid
         MecanicoDTO mecanicoResponsavel,
         @Valid
-        VeiculoDTO veiculo){
-
-        public void updateEntity(Conserto conserto) {
-                conserto.setDataDeEntrada(this.dataDeEntrada);
-                conserto.setDataDeSaida(this.dataDeSaida);
-                conserto.setDataDeSaida(this.mecanicoResponsavel().nome());
-        }
-}
+        VeiculoDTO veiculo){}
