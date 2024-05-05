@@ -1,0 +1,10 @@
+requisições
+
+post:
+
+http://localhost:8080/novoconserto
+
+get:
+
+http://localhost:8080/listartodos
+

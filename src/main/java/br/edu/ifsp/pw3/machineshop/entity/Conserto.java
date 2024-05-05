@@ -56,10 +56,4 @@ public class Conserto {
     public Veiculo getVeiculo() {
         return veiculo;
     }
-
-    private boolean ativo = true;
-
-    public void desativar() {
-        this.ativo = false;
-    }
 }

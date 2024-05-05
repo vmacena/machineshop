@@ -8,7 +8,6 @@ import br.edu.ifsp.pw3.machineshop.entity.Veiculo;
 import br.edu.ifsp.pw3.machineshop.exception.MecanicoResponsavelNullException;
 import br.edu.ifsp.pw3.machineshop.exception.ValidationException;
 import br.edu.ifsp.pw3.machineshop.repository.ConsertoRepository;
-import br.edu.ifsp.pw3.machineshop.service.ConsertoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -22,24 +21,22 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Validated
 public class ConsertoController {
     @Autowired
-    private ConsertoService service;
+    private ConsertoRepository repository;
 
     @GetMapping("/listartodos")
     public Page<Conserto> getAllConsertos(Pageable paginacao) {
-        return service.findAll(paginacao);
+        return repository.findAll(paginacao);
     }
 
     @GetMapping("/dados_simples")
     public List<DadosSimplesDTO> algunsDados(){
-        return service.findAll().stream().map(DadosSimplesDTO::new).toList();
+        return repository.findAll().stream().map(DadosSimplesDTO::new).toList();
     }
-
 
     @PostMapping("/novoconserto")
     @Transactional
@@ -53,30 +50,11 @@ public class ConsertoController {
             Mecanico mecanico = new Mecanico(novoConserto.mecanicoResponsavel().nome(), novoConserto.mecanicoResponsavel().anosDeExperiencia());
             Veiculo veiculo = new Veiculo(novoConserto.veiculo().marca(), novoConserto.veiculo().modelo(), novoConserto.veiculo().ano(), novoConserto.veiculo().cor());
             Conserto conserto = new Conserto(novoConserto.dataDeEntrada(), novoConserto.dataDeSaida(), mecanico, veiculo);
-            service.save(conserto);
+            repository.save(conserto);
             return new ResponseEntity<>( HttpStatus.CREATED);
         } else {
             throw new MecanicoResponsavelNullException("MecanicoResponsavel não pode ser null");
         }
-    }
-
-    @PutMapping("/conserto/{id}")
-    @Transactional
-    public ResponseEntity<Conserto> updateConserto(@PathVariable Long id, @RequestBody @Valid ConsertoDTO updatedConserto, BindingResult result) {
-        if (result.hasErrors()) {
-            String errorMessage = Objects.requireNonNull(result.getFieldError()).getDefaultMessage();
-            throw new ValidationException(errorMessage);
-        }
-
-        Conserto conserto = service.getById(id);
-        if (conserto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        updatedConserto.updateEntity(conserto);
-        service.save(conserto);
-
-        return new ResponseEntity<>(conserto, HttpStatus.OK);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
