@@ -1,0 +1,1 @@
+alter table Conserto add column ativo BOOLEAN default true;
