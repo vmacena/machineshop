@@ -22,8 +22,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -48,15 +46,6 @@ public class ConsertoController {
         }
     }
 
-    @GetMapping("/conserto/{id}")
-    public ResponseEntity<Conserto> getConsertoById(@PathVariable Long id){
-
-        Optional<Conserto> consertoOptional = Optional.ofNullable(service.getById(id));
-
-        return consertoOptional.map(conserto -> new ResponseEntity<>(conserto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
     @GetMapping("/listar-todos")
     public Page<Conserto> getAllConsertos(Pageable paginacao) {
         return service.findAll(paginacao);
@@ -67,6 +56,14 @@ public class ConsertoController {
         return service.findAllActive(paginacao).map(DadosSimplesDTO::new);
     }
 
+    @GetMapping("/conserto/{id}")
+    public ResponseEntity<Conserto> getConsertoById(@PathVariable Long id){
+
+        Optional<Conserto> consertoOptional = Optional.ofNullable(service.getById(id));
+
+        return consertoOptional.map(conserto -> new ResponseEntity<>(conserto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
     @PutMapping("/atualizar-parcial")
     @Transactional

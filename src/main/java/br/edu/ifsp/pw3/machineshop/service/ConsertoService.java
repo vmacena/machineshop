@@ -47,7 +47,7 @@ public class ConsertoService {
         return consertoRepository.findById(id).orElse(null);
     }
 
-    public void updatePartial(DadosAtualizacaoDTO dados){
+    public void updatePartial(DadosAtualizacaoDTO dados) {
         Conserto conserto = consertoRepository.getReferenceById(dados.id());
         conserto.atualizarInformacoes(dados);
     }

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
-
 @Entity
 @AllArgsConstructor
 @Data
@@ -34,8 +33,8 @@ public class Conserto {
     @Embedded
     private Veiculo veiculo;
 
-
-    public Conserto() {}
+    public Conserto() {
+    }
 
     public Conserto(@NotNull String dataDeEntrada, @NotNull String dataDeSaida, Mecanico mecanico, Veiculo veiculo) {
         this.dataDeEntrada = dataDeEntrada;
@@ -44,11 +43,8 @@ public class Conserto {
         this.veiculo = veiculo;
     }
 
-    public Conserto(Conserto conserto) {
-    }
-
-    public void atualizarInformacoes(DadosAtualizacaoDTO dados){
-        if(dados.dataDeSaida() != null)
+    public void atualizarInformacoes(DadosAtualizacaoDTO dados) {
+        if (dados.dataDeSaida() != null)
             this.dataDeSaida = dados.dataDeSaida();
 
         this.mecanico.atualizarInformacoes(dados.nomeMecanico(), dados.anosExperiencia());
