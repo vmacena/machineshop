@@ -18,20 +18,42 @@ Formato da requisição POST:
         }
 ```
 
+PUT parcial:
+```
+{
+            "id": 10,
+            "dataDeSaida": "10/03/2024",
+            "nomeMecanico": "Gabriel Manhani",
+            "anosExperiencia": 10
+        }
+```
+
 
 Requisições:
 
 ```
 post:
 
-http://localhost:8080/novoconserto
+http://localhost:8080/novo-conserto
 
 get:
 
-http://localhost:8080/listartodos
+http://localhost:8080/listar-todos
 
 get simples:
 
-http://localhost:8080/dados_simples
+http://localhost:8080/dados-simples
+
+get unico: 
+
+http://localhost:8080/conserto/{id}
+
+put parcial:
+
+http://localhost:8080/atualizar-parcial
+
+delete logico: 
+
+http://localhost:8080/conserto/{id}
 
 ```
