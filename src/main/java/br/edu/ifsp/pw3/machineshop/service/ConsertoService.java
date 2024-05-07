@@ -1,5 +1,6 @@
 package br.edu.ifsp.pw3.machineshop.service;
 
+import br.edu.ifsp.pw3.machineshop.dto.DadosAtualizacaoDTO;
 import br.edu.ifsp.pw3.machineshop.entity.Conserto;
 import br.edu.ifsp.pw3.machineshop.exception.ResourceNotFoundException;
 import br.edu.ifsp.pw3.machineshop.repository.ConsertoRepository;
@@ -18,8 +19,20 @@ public class ConsertoService {
         this.consertoRepository = consertoRepository;
     }
 
+    public void save(Conserto conserto) {
+        consertoRepository.save(conserto);
+    }
+
     public List<Conserto> findAll() {
         return consertoRepository.findAll();
+    }
+
+    public Page<Conserto> findAllActive(Pageable paginacao) {
+        Page<Conserto> consertos = consertoRepository.findAllByAtivoTrue(paginacao);
+        consertos.getContent().forEach(conserto -> {
+            Hibernate.initialize(conserto.getMecanico().getNome());
+        });
+        return consertos;
     }
 
     public Page<Conserto> findAll(Pageable paginacao) {
@@ -34,8 +47,9 @@ public class ConsertoService {
         return consertoRepository.findById(id).orElse(null);
     }
 
-    public Conserto save(Conserto conserto) {
-        return consertoRepository.save(conserto);
+    public void updatePartial(DadosAtualizacaoDTO dados){
+        Conserto conserto = consertoRepository.getReferenceById(dados.id());
+        conserto.atualizarInformacoes(dados);
     }
 
     public void delete(Long id) {
@@ -45,13 +59,13 @@ public class ConsertoService {
         consertoRepository.deleteById(id);
     }
 
-    public Conserto desativarConserto(Long id) {
+    public void desativarConserto(Long id) {
         Conserto conserto = consertoRepository.findById(id).orElse(null);
         if (conserto == null) {
             throw new ResourceNotFoundException("Conserto não encontrado com ID " + id);
         }
 
         conserto.desativar();
-        return consertoRepository.save(conserto);
+        consertoRepository.save(conserto);
     }
 }

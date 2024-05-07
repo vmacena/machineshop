@@ -1,29 +1,39 @@
 package br.edu.ifsp.pw3.machineshop.entity;
 
+import br.edu.ifsp.pw3.machineshop.dto.DadosAtualizacaoDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 
 @Entity
 @AllArgsConstructor
 @Data
 public class Conserto {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(name = "DATA_DE_ENTRADA")
     private String dataDeEntrada;
 
+    @Getter
     @Column(name = "DATA_DE_SAIDA")
     private String dataDeSaida;
 
+    private boolean ativo = true;
+
+    @Getter
     @Embedded
     private Mecanico mecanico;
+    @Getter
     @Embedded
     private Veiculo veiculo;
+
 
     public Conserto() {}
 
@@ -37,29 +47,15 @@ public class Conserto {
     public Conserto(Conserto conserto) {
     }
 
-    public Long getId() {
-        return id;
-    }
+    public void atualizarInformacoes(DadosAtualizacaoDTO dados){
+        if(dados.dataDeSaida() != null)
+            this.dataDeSaida = dados.dataDeSaida();
 
-    public String getDataDeEntrada() {
-        return dataDeEntrada;
+        this.mecanico.atualizarInformacoes(dados.nomeMecanico(), dados.anosExperiencia());
     }
-
-    public String getDataDeSaida() {
-        return dataDeSaida;
-    }
-
-    public Mecanico getMecanico() {
-        return mecanico;
-    }
-
-    public Veiculo getVeiculo() {
-        return veiculo;
-    }
-
-    private boolean ativo = true;
 
     public void desativar() {
         this.ativo = false;
     }
+
 }

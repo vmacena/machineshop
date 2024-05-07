@@ -1,13 +1,13 @@
 package br.edu.ifsp.pw3.machineshop.controller;
 
 import br.edu.ifsp.pw3.machineshop.dto.ConsertoDTO;
+import br.edu.ifsp.pw3.machineshop.dto.DadosAtualizacaoDTO;
 import br.edu.ifsp.pw3.machineshop.dto.DadosSimplesDTO;
 import br.edu.ifsp.pw3.machineshop.entity.Conserto;
 import br.edu.ifsp.pw3.machineshop.entity.Mecanico;
 import br.edu.ifsp.pw3.machineshop.entity.Veiculo;
 import br.edu.ifsp.pw3.machineshop.exception.MecanicoResponsavelNullException;
 import br.edu.ifsp.pw3.machineshop.exception.ValidationException;
-import br.edu.ifsp.pw3.machineshop.repository.ConsertoRepository;
 import br.edu.ifsp.pw3.machineshop.service.ConsertoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
@@ -18,11 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @Validated
@@ -30,24 +32,10 @@ public class ConsertoController {
     @Autowired
     private ConsertoService service;
 
-    @GetMapping("/listartodos")
-    public Page<Conserto> getAllConsertos(Pageable paginacao) {
-        return service.findAll(paginacao);
-    }
-
-    @GetMapping("/dados_simples")
-    public List<DadosSimplesDTO> algunsDados(){
-        return service.findAll().stream().map(DadosSimplesDTO::new).toList();
-    }
-
-
-    @PostMapping("/novoconserto")
+    @PostMapping("/novo-conserto")
     @Transactional
     public ResponseEntity<String> novoConserto(@RequestBody @Valid ConsertoDTO novoConserto, BindingResult result) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError().getDefaultMessage();
-            throw new ValidationException(errorMessage);
-        }
+        errorHandling(result, result.getFieldError());
 
         if (novoConserto.mecanicoResponsavel() != null) {
             Mecanico mecanico = new Mecanico(novoConserto.mecanicoResponsavel().nome(), novoConserto.mecanicoResponsavel().anosDeExperiencia());
@@ -60,13 +48,45 @@ public class ConsertoController {
         }
     }
 
+    @GetMapping("/conserto/{id}")
+    public ResponseEntity<Conserto> getConsertoById(@PathVariable Long id){
+
+        Optional<Conserto> consertoOptional = Optional.ofNullable(service.getById(id));
+
+        return consertoOptional.map(conserto -> new ResponseEntity<>(conserto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/listar-todos")
+    public Page<Conserto> getAllConsertos(Pageable paginacao) {
+        return service.findAll(paginacao);
+    }
+
+    @GetMapping("/dados-simples")
+    public Page<DadosSimplesDTO> algunsDados(Pageable paginacao){
+        return service.findAllActive(paginacao).map(DadosSimplesDTO::new);
+    }
+
+
+    @PutMapping("/atualizar-parcial")
+    @Transactional
+    public ResponseEntity<Conserto> updatePartial(@RequestBody @Valid DadosAtualizacaoDTO dados, BindingResult result){
+        errorHandling(result, result.getFieldError());
+
+        Conserto conserto = service.getById(dados.id());
+        if(conserto == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        service.updatePartial(dados);
+
+        conserto = service.getById(dados.id());
+        return new ResponseEntity<>(conserto, HttpStatus.OK);
+    }
+
     @PutMapping("/conserto/{id}")
     @Transactional
     public ResponseEntity<Conserto> updateConserto(@PathVariable Long id, @RequestBody @Valid ConsertoDTO updatedConserto, BindingResult result) {
-        if (result.hasErrors()) {
-            String errorMessage = Objects.requireNonNull(result.getFieldError()).getDefaultMessage();
-            throw new ValidationException(errorMessage);
-        }
+        errorHandling(result, result.getFieldError());
 
         Conserto conserto = service.getById(id);
         if (conserto == null) {
@@ -77,6 +97,21 @@ public class ConsertoController {
         service.save(conserto);
 
         return new ResponseEntity<>(conserto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/conserto/{id}")
+    @Transactional
+    public ResponseEntity<String> deleteConserto(@PathVariable Long id){
+        service.desativarConserto(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private static void errorHandling(BindingResult result, FieldError result1) {
+        if (result.hasErrors()) {
+            String errorMessage = result1.getDefaultMessage();
+            throw new ValidationException(errorMessage);
+        }
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
