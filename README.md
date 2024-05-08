@@ -18,7 +18,7 @@ Formato da requisição POST:
         }
 ```
 
-PUT parcial:
+PATCH:
 ```
 {
             "id": 10,
@@ -48,7 +48,7 @@ get unico:
 
 http://localhost:8080/conserto/{id}
 
-put parcial:
+patch:
 
 http://localhost:8080/atualizar-parcial
 

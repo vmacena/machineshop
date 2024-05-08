@@ -88,7 +88,7 @@ public class ConsertoController {
         return new ResponseEntity<>(conserto, HttpStatus.OK);
     }
 
-    @PutMapping("/conserto/{id}")
+    @PatchMapping("/conserto/{id}")
     @Transactional
     public ResponseEntity<Conserto> updateConserto(@PathVariable Long id, @RequestBody @Valid ConsertoDTO updatedConserto, BindingResult result) {
         errorHandling(result, result.getFieldError());
