@@ -8,6 +8,4 @@ public record DadosAtualizacaoDTO(@NotNull Long id, String dataDeSaida, String n
     public DadosAtualizacaoDTO(Conserto conserto) {
         this(conserto.getId(), conserto.getDataDeSaida(), conserto.getMecanico().getNome(), conserto.getMecanico().getAnosDeExperiencia());
     }
-
-
 }

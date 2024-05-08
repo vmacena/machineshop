@@ -27,6 +27,7 @@ public class Mecanico {
     }
 
     public void atualizarInformacoes(String nomeMecanico, Integer anosExperiencia) {
+        if(nomeMecanico != null)
             this.nome = nomeMecanico;
 
         if(anosExperiencia != null)
