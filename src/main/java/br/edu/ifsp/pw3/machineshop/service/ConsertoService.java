@@ -29,18 +29,20 @@ public class ConsertoService {
 
     public Page<Conserto> findAllActive(Pageable paginacao) {
         Page<Conserto> consertos = consertoRepository.findAllByAtivoTrue(paginacao);
-        consertos.getContent().forEach(conserto -> {
-            Hibernate.initialize(conserto.getMecanico().getNome());
-        });
+        initializeMecanicos(consertos);
         return consertos;
     }
 
     public Page<Conserto> findAll(Pageable paginacao) {
         Page<Conserto> consertos = consertoRepository.findAll(paginacao);
+        initializeMecanicos(consertos);
+        return consertos;
+    }
+
+    private void initializeMecanicos(Page<Conserto> consertos) {
         consertos.getContent().forEach(conserto -> {
             Hibernate.initialize(conserto.getMecanico().getNome());
         });
-        return consertos;
     }
 
     public Conserto getById(Long id) {

@@ -36,6 +36,10 @@ public class ConsertoController {
         errorHandling(result, result.getFieldError());
 
         if (novoConserto.mecanicoResponsavel() != null) {
+            if(novoConserto.mecanicoResponsavel().nome() == null || novoConserto.mecanicoResponsavel().nome().trim().isEmpty()) {
+                throw new IllegalArgumentException("Nome do mecânico é obrigatório e não pode ser vazio.");
+            }
+
             Mecanico mecanico = new Mecanico(novoConserto.mecanicoResponsavel().nome(), novoConserto.mecanicoResponsavel().anosDeExperiencia());
             Veiculo veiculo = new Veiculo(novoConserto.veiculo().marca(), novoConserto.veiculo().modelo(), novoConserto.veiculo().ano(), novoConserto.veiculo().cor());
             Conserto conserto = new Conserto(novoConserto.dataDeEntrada(), novoConserto.dataDeSaida(), mecanico, veiculo);
@@ -73,6 +77,10 @@ public class ConsertoController {
         Conserto conserto = service.getById(dados.id());
         if(conserto == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if(dados.nomeMecanico() != null && dados.nomeMecanico().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do mecânico é obrigatório e não pode ser vazio.");
+        }
 
         service.updatePartial(dados);
 
