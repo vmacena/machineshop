@@ -9,6 +9,4 @@ public record DadosSimplesDTO(Long id, String dataDeEntrada, String dataDeSaida,
         this(conserto.getId(), conserto.getDataDeEntrada(), conserto.getDataDeSaida(), conserto.getMecanico().getNome(),
                 conserto.getVeiculo().getMarca(), conserto.getVeiculo().getModelo());
     }
-
-
 }

@@ -27,96 +27,70 @@ import java.util.Optional;
 @RestController
 @Validated
 public class ConsertoController {
-    @Autowired
-    private ConsertoService service;
+
+   private final ConsertoService service;
+
+   public ConsertoController(ConsertoService service) {
+       this.service = service;
+   }
 
     @PostMapping("/novo-conserto")
-    @Transactional
-    public ResponseEntity<String> novoConserto(@RequestBody @Valid ConsertoDTO novoConserto, BindingResult result) {
-        errorHandling(result, result.getFieldError());
-
-        if (novoConserto.mecanicoResponsavel() != null) {
-            if(novoConserto.mecanicoResponsavel().nome() == null || novoConserto.mecanicoResponsavel().nome().trim().isEmpty()) {
-                throw new IllegalArgumentException("Nome do mecânico é obrigatório e não pode ser vazio.");
-            }
-
-            Mecanico mecanico = new Mecanico(novoConserto.mecanicoResponsavel().nome(), novoConserto.mecanicoResponsavel().anosDeExperiencia());
-            Veiculo veiculo = new Veiculo(novoConserto.veiculo().marca(), novoConserto.veiculo().modelo(), novoConserto.veiculo().ano(), novoConserto.veiculo().cor());
-            Conserto conserto = new Conserto(novoConserto.dataDeEntrada(), novoConserto.dataDeSaida(), mecanico, veiculo);
-            service.save(conserto);
-            return new ResponseEntity<>( HttpStatus.CREATED);
-        } else {
-            throw new MecanicoResponsavelNullException("MecanicoResponsavel não pode ser null");
-        }
+    public ResponseEntity<Conserto> novoConserto(@RequestBody @Valid ConsertoDTO novoConserto) {
+        Mecanico mecanico = new Mecanico(novoConserto.mecanicoResponsavel().nome(), novoConserto.mecanicoResponsavel().anosDeExperiencia());
+        Veiculo veiculo = new Veiculo(novoConserto.veiculo().marca(), novoConserto.veiculo().modelo(), novoConserto.veiculo().ano(), novoConserto.veiculo().cor());
+        Conserto conserto = new Conserto(novoConserto.dataDeEntrada(), novoConserto.dataDeSaida(), mecanico, veiculo);
+        Conserto savedConserto = service.save(conserto);
+        return new ResponseEntity<>(savedConserto, HttpStatus.CREATED);
     }
 
     @GetMapping("/listar-todos")
-    public Page<Conserto> getAllConsertos(Pageable paginacao) {
-        return service.findAll(paginacao);
+    public ResponseEntity<Page<Conserto>> getAllConsertos(Pageable paginacao) {
+        Page<Conserto> consertos = service.findAll(paginacao);
+        return new ResponseEntity<>(consertos, HttpStatus.OK);
     }
 
     @GetMapping("/dados-simples")
-    public Page<DadosSimplesDTO> algunsDados(Pageable paginacao){
-        return service.findAllActive(paginacao).map(DadosSimplesDTO::new);
+    public ResponseEntity<Page<DadosSimplesDTO>> algunsDados(Pageable paginacao){
+        Page<DadosSimplesDTO> dados = service.findAllActive(paginacao).map(DadosSimplesDTO::new);
+        return new ResponseEntity<>(dados, HttpStatus.OK);
     }
 
     @GetMapping("/conserto/{id}")
     public ResponseEntity<Conserto> getConsertoById(@PathVariable Long id){
-
-        Optional<Conserto> consertoOptional = Optional.ofNullable(service.getById(id));
-
+        Optional<Conserto> consertoOptional = service.getById(id);
         return consertoOptional.map(conserto -> new ResponseEntity<>(conserto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/atualizar-parcial")
-    @Transactional
-    public ResponseEntity<Conserto> updatePartial(@RequestBody @Valid DadosAtualizacaoDTO dados, BindingResult result){
-        errorHandling(result, result.getFieldError());
-
-        Conserto conserto = service.getById(dados.id());
-        if(conserto == null)
+    public ResponseEntity<Conserto> updatePartial(@RequestBody @Valid DadosAtualizacaoDTO dados){
+        Optional<Conserto> consertoOptional = service.getById(dados.id());
+        if(consertoOptional.isPresent()) {
+            service.updatePartial(dados);
+            Conserto updatedConserto = service.getById(dados.id()).get();
+            return new ResponseEntity<>(updatedConserto, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        if(dados.nomeMecanico() != null && dados.nomeMecanico().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do mecânico é obrigatório e não pode ser vazio.");
         }
-
-        service.updatePartial(dados);
-
-        conserto = service.getById(dados.id());
-        return new ResponseEntity<>(conserto, HttpStatus.OK);
     }
 
     @PatchMapping("/conserto/{id}")
-    @Transactional
-    public ResponseEntity<Conserto> updateConserto(@PathVariable Long id, @RequestBody @Valid ConsertoDTO updatedConserto, BindingResult result) {
-        errorHandling(result, result.getFieldError());
-
-        Conserto conserto = service.getById(id);
-        if (conserto == null) {
+    public ResponseEntity<Conserto> updateConserto(@PathVariable Long id, @RequestBody @Valid ConsertoDTO updatedConserto) {
+        Optional<Conserto> consertoOptional = service.getById(id);
+        if(consertoOptional.isPresent()) {
+            Conserto conserto = consertoOptional.get();
+            updatedConserto.updateEntity(conserto);
+            service.save(conserto);
+            return new ResponseEntity<>(conserto, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        updatedConserto.updateEntity(conserto);
-        service.save(conserto);
-
-        return new ResponseEntity<>(conserto, HttpStatus.OK);
     }
 
     @DeleteMapping("/conserto/{id}")
-    @Transactional
-    public ResponseEntity<String> deleteConserto(@PathVariable Long id){
+    public ResponseEntity<Void> deleteConserto(@PathVariable Long id){
         service.desativarConserto(id);
-
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private static void errorHandling(BindingResult result, FieldError result1) {
-        if (result.hasErrors()) {
-            String errorMessage = result1.getDefaultMessage();
-            throw new ValidationException(errorMessage);
-        }
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
