@@ -11,15 +11,16 @@ import lombok.Getter;
 @Data
 public class Veiculo {
 
-    @Getter
+
     @Column(name = "VEICULO_MARCA")
     private String marca;
-    @Getter
+
     @Column(name = "VEICULO_MODELO")
     private String modelo;
+
     @Column(name = "VEICULO_ANO")
     private String ano;
-    @Getter
+
     @Column(name = "VEICULO_COR")
     private String cor;
 

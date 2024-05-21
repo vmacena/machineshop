@@ -4,61 +4,41 @@ import br.edu.ifsp.pw3.machineshop.dto.DadosAtualizacaoDTO;
 import br.edu.ifsp.pw3.machineshop.entity.Conserto;
 import br.edu.ifsp.pw3.machineshop.exception.ResourceNotFoundException;
 import br.edu.ifsp.pw3.machineshop.repository.ConsertoRepository;
-import org.hibernate.Hibernate;
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConsertoService {
+
     private final ConsertoRepository consertoRepository;
 
     public ConsertoService(ConsertoRepository consertoRepository) {
         this.consertoRepository = consertoRepository;
     }
 
-    public void save(Conserto conserto) {
-        consertoRepository.save(conserto);
-    }
-
-    public List<Conserto> findAll() {
-        return consertoRepository.findAll();
-    }
+    @Transactional
+    public Conserto save(Conserto conserto) { return consertoRepository.save(conserto); }
 
     public Page<Conserto> findAllActive(Pageable paginacao) {
-        Page<Conserto> consertos = consertoRepository.findAllByAtivoTrue(paginacao);
-        initializeMecanicos(consertos);
-        return consertos;
+        return consertoRepository.findAllByAtivoTrue(paginacao);
     }
 
     public Page<Conserto> findAll(Pageable paginacao) {
-        Page<Conserto> consertos = consertoRepository.findAll(paginacao);
-        initializeMecanicos(consertos);
-        return consertos;
+       return consertoRepository.findAll(paginacao);
     }
 
-    private void initializeMecanicos(Page<Conserto> consertos) {
-        consertos.getContent().forEach(conserto -> {
-            Hibernate.initialize(conserto.getMecanico().getNome());
-        });
-    }
-
-    public Conserto getById(Long id) {
-        return consertoRepository.findById(id).orElse(null);
+    public Optional<Conserto> getById(Long id) {
+        return consertoRepository.findById(id);
     }
 
     public void updatePartial(DadosAtualizacaoDTO dados) {
         Conserto conserto = consertoRepository.getReferenceById(dados.id());
         conserto.atualizarInformacoes(dados);
-    }
-
-    public void delete(Long id) {
-        if (!consertoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Conserto não encontrado com ID " + id);
-        }
-        consertoRepository.deleteById(id);
     }
 
     public void desativarConserto(Long id) {
