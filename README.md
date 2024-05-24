@@ -34,15 +34,19 @@ Requisições:
 ```
 post:
 
-http://localhost:8080/novo-conserto
+http://localhost:8080/conserto
 
 get:
 
-http://localhost:8080/listar-todos
+http://localhost:8080/consertos
+
+get ativos:
+
+http://localhost:8080/consertos-ativos
 
 get simples:
 
-http://localhost:8080/dados-simples
+http://localhost:8080/consertos-paginacao
 
 get unico: 
 
@@ -50,7 +54,7 @@ http://localhost:8080/conserto/{id}
 
 patch:
 
-http://localhost:8080/atualizar-parcial
+http://localhost:8080/conserto/desativar/{id}
 
 delete logico: 
 
