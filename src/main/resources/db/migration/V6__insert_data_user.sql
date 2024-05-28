@@ -1,0 +1,1 @@
+insert into usuarios(login, senha) values('admin', '$2a$12$rVVhZuBP3dqYqBU5QXBhN.ZznPHIA.U/DDlJV13ZHjBr2vRCH6USm')
