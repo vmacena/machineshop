@@ -1,5 +1,15 @@
 EAD 3 de Programação Web 3. Feito por Gabriel Zanotim Manhani e Vinicius Macena.
 
+Forma de acesso: Fazer requisição de login (POST) com o formato disponibilado a baixo. Feito isso, o acesso para as demais requisições estará liberado. 
+
+Formato da requisição POST // Login:
+```
+{
+            "login": "admin",
+            "senha": "123456"
+        }
+```
+
 Formato da requisição POST:
 ```
 {
@@ -32,6 +42,11 @@ PATCH:
 Requisições:
 
 ```
+
+post:
+
+http://localhost:8080/login
+
 post:
 
 http://localhost:8080/conserto
