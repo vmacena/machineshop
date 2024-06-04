@@ -1,7 +1,11 @@
 package br.edu.ifsp.pw3.machineshop.controller;
 
+import br.edu.ifsp.pw3.machineshop.dto.ConsertoDTO;
 import br.edu.ifsp.pw3.machineshop.dto.DadosAtualizacaoDTO;
 import br.edu.ifsp.pw3.machineshop.entity.Conserto;
+import br.edu.ifsp.pw3.machineshop.entity.Mecanico;
+import br.edu.ifsp.pw3.machineshop.entity.Veiculo;
+import br.edu.ifsp.pw3.machineshop.exception.MecanicoResponsavelNullException;
 import br.edu.ifsp.pw3.machineshop.service.ConsertoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -29,10 +33,10 @@ public class ConsertoController {
 
     @PostMapping("/conserto")
     @Transactional
-    public ResponseEntity<Void> saveConserto(@RequestBody @Valid Conserto conserto, BindingResult result) {
+    public ResponseEntity<String> novoConserto(@RequestBody @Valid ConsertoDTO novoConserto, BindingResult result) {
         errorHandling(result, result.getFieldError());
-        service.save(conserto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        service.criarNovoConserto(novoConserto);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
     @GetMapping("/consertos")

@@ -11,6 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Data
 public class Conserto {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

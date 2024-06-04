@@ -33,6 +33,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req -> {
 
                     req.requestMatchers(antMatcher("/login")).permitAll();
+                    req.requestMatchers(antMatcher("/h2-console")).permitAll();
 
                     req.anyRequest().authenticated();
                 })
